@@ -10,11 +10,15 @@ Vector::Vector(int a, int b) {
 }
 
 //konstruktor kopiujący
-Vector::Vector(const Position &pos){
+Vector::Vector(const Position &pos) {
+  my_x = pos.x();
+  my_y = pos.y();
   cout<<"copying constructor vector\n";
 }
 //konstruktor przenoszący
 Vector::Vector(Position &&pos) {
+  my_x = move(pos.x());
+  my_y = move(pos.y());
   cout<<"moving constructor vector\n";
 }
 
@@ -52,10 +56,14 @@ Position::Position(int a, int b) {
 
 //konstruktor kopiujący
 Position::Position(const Vector &vec) {
+  my_x = vec.x();
+  my_y = vec.y();
   cout<<"copying constuctor position\n";
 }
 //konstruktor przenoszący
 Position::Position(Vector &&vec) {
+  my_x = move(vec.x());
+  my_y = move(vec.y());
   cout<<"moving constuctor position\n";
 }
 
@@ -103,13 +111,14 @@ Vector operator+ (const Vector &vec1, const Vector &vec2) {
 
 
 int main() {
-  
+  /*
   Position p1(1, 2);
   Vector v1(p1);
   Vector v2(2, 3);
   Position p2(v2);
   p2 = Position(v1);
   v1 = Vector(p2);
-  
-  Position(Vector(Position(1,2)));
+  */
+  Position p = Position(Vector(Position(1,2)));
+  p.wypisz();
 }
