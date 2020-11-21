@@ -9,9 +9,20 @@ class Vector {
   
   public:
     Vector() = delete;
+    
     Vector(int a, int b) {
       my_x = a;
       my_y = b;
+    }
+    
+    //konstruktor kopiujący
+    Vector(const Vector &vec) : my_x(vec.my_x), my_y(vec.my_y) {
+    }
+    //konstruktor przenoszący
+    Vector(Vector &&vec) : my_x(move(vec.my_x)), my_y(move(vec.my_y)) {
+    }
+    //destruktor
+    ~Vector(){
     }
     
     bool operator== (const Vector &vec) {
@@ -50,6 +61,16 @@ class Position {
       cout<<"tworze Position "<<a<<" "<<b<<endl;
       my_x = a;
       my_y = b;
+    }
+    
+    //konstruktor kopiujący
+    Position(const Position &pos) : my_x(pos.my_x), my_y(pos.my_y) {
+    }
+    //konstruktor przenoszący
+    Position(Position &&pos) : my_x(move(pos.my_x)), my_y(move(pos.my_y)) {
+    }
+    //destruktor
+    ~Position(){
     }
     
     bool operator== (const Position &pos) {
@@ -97,16 +118,11 @@ Vector operator+ (const Vector &vec1, const Vector &vec2) {
 
 
 int main() {
-  Position p = Position(8, 9);
-  Vector v(2, 1);
-  Vector w(4, 3);
-  Vector u = v + w;
+  Vector v = Vector(2, 1);
+  Vector w = Vector(v);
   v.wypisz();
   w.wypisz();
-  u.wypisz();
-  Position q = v + p;
-  p.wypisz();
-  q.wypisz();
-  p += v;
-  p.wypisz();
+  v += (Vector(1,1));
+  v.wypisz();
+  w.wypisz();
 }
