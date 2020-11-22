@@ -153,8 +153,8 @@ Rectangle Rectangle::reflection() const {
     return Rectangle(recHeight, recWidth, recPosition.reflection());
 }
 
-int Rectangle::area() const {
-    return recWidth * recHeight;
+int_fast64_t Rectangle::area() const {
+    return static_cast<int_fast64_t>(recWidth) * recHeight;
 }
 
 Rectangle &Rectangle::operator+=(const Vector &rhs) {

@@ -84,7 +84,7 @@ public:
 
     Rectangle reflection() const;
 
-    int area() const;
+    int_fast64_t area() const;
 
     Rectangle &operator+=(const Vector &rhs);
 
