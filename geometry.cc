@@ -186,13 +186,13 @@ const size_t Rectangles::size() const {
 }
 
 Rectangle &Rectangles::operator[](size_t i) {
-    assert(i > 0 && i < size());
+    assert(i >= 0 && i < size());
 
     return rectangles[i];
 }
 
 const Rectangle &Rectangles::operator[](size_t i) const {
-  assert(i > 0 && i < size());
+  assert(i >= 0 && i < size());
 
   return rectangles[i];
 }
@@ -264,6 +264,9 @@ Rectangle merge_all(const Rectangles &rects) {
     else if (height == rects[i].height() && pos + Vector(width, 0) == rects[i].pos()) {
       width += rects[i].width();
     }
+    else {
+      assert(1 == 0);
+    }
   }
   
   return Rectangle(width, height, pos);
@@ -283,7 +286,7 @@ int main() {
 
 
     cout << endl << "============ RECTANGLES ============" << endl << endl;
-
+/*
     Rectangle r1(1, 1, p1);
 
     printRectangle(r1);
@@ -299,4 +302,15 @@ int main() {
     Rectangle r4 = v1 + r1;
 
     printRectangle(r4);
+    */
+    
+    Rectangle r = merge_horizontally(Rectangle(1,2), Rectangle(1, 7, Position(0, 2)));
+    Rectangle r2 = merge_vertically(Rectangle(3, 2, Position(-3, 0)), Rectangle(4, 2));
+    //printRectangle(r2);
+    Rectangles col = Rectangles({Rectangle(1, 2),
+                    Rectangle(3, 2, Position(1, 0)),
+                    Rectangle(4, 1, Position(0, 2)),
+                    Rectangle(4, 1, Position(0, 3))});
+    Rectangle wyn = merge_all(col);
+    printRectangle(wyn);
 }
