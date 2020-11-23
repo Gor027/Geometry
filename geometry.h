@@ -70,7 +70,7 @@ public:
 
     Rectangle(int width, int height);
 
-    Rectangle(int width, int height, Position pos);
+    Rectangle(int width, int height, const Position &pos);
 
     bool operator==(const Rectangle &rhs);
 
@@ -98,8 +98,8 @@ public:
     Rectangles();
 
     Rectangles(std::initializer_list<Rectangle> rectanglesList);
-    
-    Rectangles(const Rectangles& other);
+
+    Rectangles(const Rectangles &other);
 
     Rectangles(Rectangles &&other);
 

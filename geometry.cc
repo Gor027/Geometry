@@ -1,5 +1,4 @@
 #include <iostream>
-#include <typeinfo>
 #include <cassert>
 #include "geometry.h"
 
@@ -119,7 +118,7 @@ Rectangle::Rectangle(int width, int height) : recPosition(0, 0) {
     recHeight = height;
 }
 
-Rectangle::Rectangle(int width, int height, Position pos) : recPosition(pos) {
+Rectangle::Rectangle(int width, int height, const Position &pos) : recPosition(pos) {
     assert(width > 0 && height > 0);
     recWidth = width;
     recHeight = height;
@@ -176,7 +175,7 @@ Rectangles::Rectangles(std::initializer_list<Rectangle> rectanglesList) {
     rectangles = vec;
 }
 
-Rectangles::Rectangles(const Rectangles& other) : rectangles(other.rectangles) {
+Rectangles::Rectangles(const Rectangles &other) : rectangles(other.rectangles) {
 }
 
 Rectangles::Rectangles(Rectangles &&other) : rectangles(std::move(other.rectangles)) {
@@ -207,7 +206,7 @@ const Rectangle &Rectangles::operator[](size_t i) const {
 bool Rectangles::operator==(const Rectangles &rhs) {
     for (auto r1 : rectangles) {
         bool isFound = false;
-        for (auto r2 : rhs.rectangles) {
+        for (const auto &r2 : rhs.rectangles) {
             if (r1 == r2) {
                 isFound = true;
             }
@@ -222,8 +221,8 @@ bool Rectangles::operator==(const Rectangles &rhs) {
 }
 
 Rectangles &Rectangles::operator+=(const Vector &rhs) {
-    for (size_t i = 0; i < rectangles.size(); i++) {
-      rectangles[i] += rhs;
+    for (auto &rectangle : rectangles) {
+        rectangle += rhs;
     }
 
     return *this;
@@ -280,21 +279,21 @@ Rectangle merge_all(const Rectangles &rects) {
 }
 
 Rectangles operator+(const Rectangles &recs, const Vector &vec) {
-  return (Rectangles) (recs) += vec;
+    return (Rectangles) (recs) += vec;
 }
 
 Rectangles operator+(const Vector &vec, const Rectangles &recs) {
-  return (Rectangles) (recs) += vec;
+    return (Rectangles) (recs) += vec;
 }
 
 Rectangles operator+(Rectangles &&recs, const Vector &vec) {
-  cout<<"moving +\n";
-  return move(recs) += vec;
+    cout << "moving +\n";
+    return move(recs) += vec;
 }
 
 Rectangles operator+(const Vector &vec, Rectangles &&recs) {
-  cout<<"moving +\n";
-  return move(recs) += vec;
+    cout << "moving +\n";
+    return move(recs) += vec;
 }
 
 int main() {
@@ -337,19 +336,19 @@ int main() {
                                  Rectangle(4, 1, Position(0, 3))});
     Rectangle wyn = merge_all(col);
     //printRectangle(wyn);
-    
+
     for (size_t i = 0; i < col.size(); i++) {
-      printRectangle(col[i]);
+        printRectangle(col[i]);
     }
     Rectangles col2 = col + Vector(1, 1) + Vector(2, 2) + Vector(3, 3);
     for (size_t i = 0; i < col2.size(); i++) {
-      printRectangle(col2[i]);
+        printRectangle(col2[i]);
     }
-    
+
     for (size_t i = 0; i < col.size(); i++) {
-      printRectangle(col[i]);
+        printRectangle(col[i]);
     }
-    
+
     Rectangles recs;
     if (recs.size() == 0) {
         cout << "The recs is empty\n";
