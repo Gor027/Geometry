@@ -91,6 +91,8 @@ class Rectangles {
     std::vector<Rectangle> rectangles;
 
 public:
+    Rectangles();
+
     Rectangles(std::initializer_list<Rectangle> rectanglesList);
 
     Rectangles(Rectangles &&other);

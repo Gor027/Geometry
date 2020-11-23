@@ -163,6 +163,8 @@ void printRectangle(const Rectangle &rec) {
     cout << "ending printing rectangle" << endl << endl;
 }
 
+Rectangles::Rectangles() = default;
+
 Rectangles::Rectangles(std::initializer_list<Rectangle> rectanglesList) {
     std::vector<Rectangle> vec = rectanglesList;
     rectangles = vec;
@@ -306,4 +308,9 @@ int main() {
                                  Rectangle(4, 1, Position(0, 3))});
     Rectangle wyn = merge_all(col);
     printRectangle(wyn);
+
+    Rectangles recs;
+    if (recs.size() == 0) {
+        cout << "The recs is empty";
+    }
 }
