@@ -219,8 +219,8 @@ bool Rectangles::operator==(const Rectangles &rhs) {
 }
 
 Rectangles &Rectangles::operator+=(const Vector &rhs) {
-    for (auto r : rectangles) {
-        r += rhs;
+    for (size_t i = 0; i < rectangles.size(); i++) {
+      rectangles[i] += rhs;
     }
 
     return *this;
@@ -315,7 +315,15 @@ int main() {
                                  Rectangle(4, 1, Position(0, 2)),
                                  Rectangle(4, 1, Position(0, 3))});
     Rectangle wyn = merge_all(col);
-    printRectangle(wyn);
+    //printRectangle(wyn);
+    
+    for (size_t i = 0; i < col.size(); i++) {
+      printRectangle(col[i]);
+    }
+    col += Vector(1, 1);
+    for (size_t i = 0; i < col.size(); i++) {
+      printRectangle(col[i]);
+    }
 
     Rectangles recs;
     if (recs.size() == 0) {
