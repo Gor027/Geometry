@@ -249,20 +249,13 @@ Rectangle merge_vertically(const Rectangle &rect1, const Rectangle &rect2) {
   
   return Rectangle(rect1.width() + rect2.width(), rect1.height(), rect1.pos());
 }
-/*
-static void Rectangle::add_height(int height) {
-  recHeight += height;
-}
-static void Rectangle::add_width(int width) {
-  recWidth += width;
-}*/
 
 Rectangle merge_all(const Rectangles &rects) {
-  /*assert(rects.size() > 0);
+  assert(rects.size() > 0);
   
   Position pos = rects[0].pos();
-  int height = rects[0].height;
-  int width = rects[0].width;
+  int height = rects[0].height();
+  int width = rects[0].width();
   
   for (size_t i = 1; i < rects.size(); i++) {
     if (width == rects[i].width() && pos + Vector(0, height) == rects[i].pos()) {
@@ -273,7 +266,7 @@ Rectangle merge_all(const Rectangles &rects) {
     }
   }
   
-  return Rectangle(width, height, pos);*/
+  return Rectangle(width, height, pos);
   return (Rectangle)rects[0];
 }
 
