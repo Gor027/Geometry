@@ -177,12 +177,8 @@ Rectangles &Rectangles::operator=(Rectangles &&other) {
     return *this;
 }
 
-size_t Rectangles::size() {
+size_t Rectangles::size() const {
     return rectangles.size();
-}
-
-const size_t Rectangles::size() const {
-  return rectangles.size();
 }
 
 Rectangle &Rectangles::operator[](size_t i) {
@@ -192,9 +188,9 @@ Rectangle &Rectangles::operator[](size_t i) {
 }
 
 const Rectangle &Rectangles::operator[](size_t i) const {
-  assert(i >= 0 && i < size());
+    assert(i >= 0 && i < size());
 
-  return rectangles[i];
+    return rectangles[i];
 }
 
 bool Rectangles::operator==(const Rectangles &rhs) {
@@ -223,54 +219,51 @@ Rectangles &Rectangles::operator+=(const Vector &rhs) {
 }
 
 static bool horizontally_possible(const Rectangle &rect1, const Rectangle &rect2) {
-  if (rect1.pos() + Vector(0, rect1.height()) == rect2.pos()
-      && rect1.width() == rect2.width())
-    return true;
-    
-  return false;
+    if (rect1.pos() + Vector(0, rect1.height()) == rect2.pos()
+        && rect1.width() == rect2.width())
+        return true;
+
+    return false;
 }
 
 static bool vertically_possible(const Rectangle &rect1, const Rectangle &rect2) {
-  if (rect1.pos() + Vector(rect1.width(), 0) == rect2.pos()
-      && rect1.height() == rect2.height())
-    return true;
-    
-  return false;
+    if (rect1.pos() + Vector(rect1.width(), 0) == rect2.pos()
+        && rect1.height() == rect2.height())
+        return true;
+
+    return false;
 }
 
 Rectangle merge_horizontally(const Rectangle &rect1, const Rectangle &rect2) {
-  assert (horizontally_possible(rect1, rect2));
-  
-  return Rectangle(rect1.width(), rect1.height() + rect2.height(), rect1.pos());
+    assert (horizontally_possible(rect1, rect2));
+
+    return Rectangle(rect1.width(), rect1.height() + rect2.height(), rect1.pos());
 }
 
 Rectangle merge_vertically(const Rectangle &rect1, const Rectangle &rect2) {
-  assert(vertically_possible(rect1, rect2));
-  
-  return Rectangle(rect1.width() + rect2.width(), rect1.height(), rect1.pos());
+    assert(vertically_possible(rect1, rect2));
+
+    return Rectangle(rect1.width() + rect2.width(), rect1.height(), rect1.pos());
 }
 
 Rectangle merge_all(const Rectangles &rects) {
-  assert(rects.size() > 0);
-  
-  Position pos = rects[0].pos();
-  int height = rects[0].height();
-  int width = rects[0].width();
-  
-  for (size_t i = 1; i < rects.size(); i++) {
-    if (width == rects[i].width() && pos + Vector(0, height) == rects[i].pos()) {
-      height += rects[i].height();
+    assert(rects.size() > 0);
+
+    Position pos = rects[0].pos();
+    int height = rects[0].height();
+    int width = rects[0].width();
+
+    for (size_t i = 1; i < rects.size(); i++) {
+        if (width == rects[i].width() && pos + Vector(0, height) == rects[i].pos()) {
+            height += rects[i].height();
+        } else if (height == rects[i].height() && pos + Vector(width, 0) == rects[i].pos()) {
+            width += rects[i].width();
+        } else {
+            assert(1 == 0);
+        }
     }
-    else if (height == rects[i].height() && pos + Vector(width, 0) == rects[i].pos()) {
-      width += rects[i].width();
-    }
-    else {
-      assert(1 == 0);
-    }
-  }
-  
-  return Rectangle(width, height, pos);
-  return (Rectangle)rects[0];
+
+    return Rectangle(width, height, pos);
 }
 
 int main() {
@@ -303,14 +296,14 @@ int main() {
 
     printRectangle(r4);
     */
-    
-    Rectangle r = merge_horizontally(Rectangle(1,2), Rectangle(1, 7, Position(0, 2)));
+
+    Rectangle r = merge_horizontally(Rectangle(1, 2), Rectangle(1, 7, Position(0, 2)));
     Rectangle r2 = merge_vertically(Rectangle(3, 2, Position(-3, 0)), Rectangle(4, 2));
     //printRectangle(r2);
     Rectangles col = Rectangles({Rectangle(1, 2),
-                    Rectangle(3, 2, Position(1, 0)),
-                    Rectangle(4, 1, Position(0, 2)),
-                    Rectangle(4, 1, Position(0, 3))});
+                                 Rectangle(3, 2, Position(1, 0)),
+                                 Rectangle(4, 1, Position(0, 2)),
+                                 Rectangle(4, 1, Position(0, 3))});
     Rectangle wyn = merge_all(col);
     printRectangle(wyn);
 }

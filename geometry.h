@@ -105,9 +105,7 @@ public:
 
     Rectangles &operator+=(const Vector &rhs);
 
-    size_t size();
-    
-    const size_t size() const;
+    size_t size() const;
 };
 
 Position operator+(const Position &pos, const Vector &vec);
@@ -120,6 +118,6 @@ Rectangle merge_horizontally(const Rectangle &rect1, const Rectangle &rect2);
 
 Rectangle merge_vertically(const Rectangle &rect1, const Rectangle &rect2);
 
-Rectangle merge_all(Rectangles rects);
+Rectangle merge_all(const Rectangles &rects);
 
 #endif /* GEOMETRY_H */
