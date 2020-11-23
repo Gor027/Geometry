@@ -11,7 +11,7 @@ class Vector {
     int my_y;
 
 public:
-    Vector() = delete;
+    ~Vector();
 
     Vector(int a, int b);
 
@@ -38,7 +38,7 @@ class Position {
     int my_y;
 
 public:
-    Position() = delete;
+    ~Position();
 
     Position(int a, int b);
 
@@ -66,6 +66,8 @@ class Rectangle {
     int recHeight;
 
 public:
+    ~Rectangle();
+
     Rectangle(int width, int height);
 
     Rectangle(int width, int height, Position pos);
@@ -91,6 +93,8 @@ class Rectangles {
     std::vector<Rectangle> rectangles;
 
 public:
+    ~Rectangles();
+
     Rectangles();
 
     Rectangles(std::initializer_list<Rectangle> rectanglesList);

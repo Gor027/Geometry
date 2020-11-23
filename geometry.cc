@@ -5,6 +5,8 @@
 
 using namespace std;
 
+Vector::~Vector() = default;
+
 Vector::Vector(int a, int b) {
     my_x = a;
     my_y = b;
@@ -43,6 +45,8 @@ int Vector::y() const {
 void Vector::wypisz() {
     cout << my_x << " " << my_y << endl;
 }
+
+Position::~Position() = default;
 
 Position::Position(int a, int b) {
     //cout<<"tworze Position "<<a<<" "<<b<<endl;
@@ -106,6 +110,8 @@ Rectangle Vector::operator+(const Rectangle &rhs) const {
 
     return result;
 }
+
+Rectangle::~Rectangle() = default;
 
 Rectangle::Rectangle(int width, int height) : recPosition(0, 0) {
     assert(width > 0 && height > 0);
@@ -219,6 +225,8 @@ Rectangles &Rectangles::operator+=(const Vector &rhs) {
 
     return *this;
 }
+
+Rectangles::~Rectangles() = default;
 
 static bool horizontally_possible(const Rectangle &rect1, const Rectangle &rect2) {
     if (rect1.pos() + Vector(0, rect1.height()) == rect2.pos()
