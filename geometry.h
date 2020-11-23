@@ -98,6 +98,8 @@ public:
     Rectangles();
 
     Rectangles(std::initializer_list<Rectangle> rectanglesList);
+    
+    Rectangles(const Rectangles& other);
 
     Rectangles(Rectangles &&other);
 
@@ -125,5 +127,14 @@ Rectangle merge_horizontally(const Rectangle &rect1, const Rectangle &rect2);
 Rectangle merge_vertically(const Rectangle &rect1, const Rectangle &rect2);
 
 Rectangle merge_all(const Rectangles &rects);
+
+
+Rectangles operator+(const Rectangles &recs, const Vector &vec);
+
+Rectangles operator+(const Vector &vec, const Rectangles &recs);
+
+Rectangles operator+(Rectangles &&recs, const Vector &vec);
+
+Rectangles operator+(const Vector &vec, Rectangles &&recs);
 
 #endif /* GEOMETRY_H */

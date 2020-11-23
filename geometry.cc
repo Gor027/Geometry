@@ -176,6 +176,9 @@ Rectangles::Rectangles(std::initializer_list<Rectangle> rectanglesList) {
     rectangles = vec;
 }
 
+Rectangles::Rectangles(const Rectangles& other) : rectangles(other.rectangles) {
+}
+
 Rectangles::Rectangles(Rectangles &&other) : rectangles(std::move(other.rectangles)) {
 }
 
@@ -276,6 +279,24 @@ Rectangle merge_all(const Rectangles &rects) {
     return Rectangle(width, height, pos);
 }
 
+Rectangles operator+(const Rectangles &recs, const Vector &vec) {
+  return (Rectangles) (recs) += vec;
+}
+
+Rectangles operator+(const Vector &vec, const Rectangles &recs) {
+  return (Rectangles) (recs) += vec;
+}
+
+Rectangles operator+(Rectangles &&recs, const Vector &vec) {
+  cout<<"moving +\n";
+  return move(recs) += vec;
+}
+
+Rectangles operator+(const Vector &vec, Rectangles &&recs) {
+  cout<<"moving +\n";
+  return move(recs) += vec;
+}
+
 int main() {
     Position p1(1, 2);
     Vector v1(p1);
@@ -320,13 +341,17 @@ int main() {
     for (size_t i = 0; i < col.size(); i++) {
       printRectangle(col[i]);
     }
-    col += Vector(1, 1);
+    Rectangles col2 = col + Vector(1, 1) + Vector(2, 2) + Vector(3, 3);
+    for (size_t i = 0; i < col2.size(); i++) {
+      printRectangle(col2[i]);
+    }
+    
     for (size_t i = 0; i < col.size(); i++) {
       printRectangle(col[i]);
     }
-
+    
     Rectangles recs;
     if (recs.size() == 0) {
-        cout << "The recs is empty";
+        cout << "The recs is empty\n";
     }
 }
