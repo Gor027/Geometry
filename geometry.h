@@ -72,7 +72,7 @@ public:
 
     Rectangle(int width, int height, const Position &pos);
 
-    bool operator==(const Rectangle &rhs);
+    bool operator==(const Rectangle &rhs) const;
 
     int width() const;
 
@@ -82,11 +82,13 @@ public:
 
     Rectangle reflection() const;
 
-    int_fast64_t area() const;
+    size_t area() const;
 
     Rectangle &operator+=(const Vector &rhs);
 
     Rectangle operator+(const Vector &rhs) const;
+
+    void printRectangle();
 };
 
 class Rectangles {
@@ -102,6 +104,8 @@ public:
     Rectangles(const Rectangles &other);
 
     Rectangles(Rectangles &&other);
+
+    Rectangles &operator=(const Rectangles &rhs);
 
     Rectangles &operator=(Rectangles &&other);
 
