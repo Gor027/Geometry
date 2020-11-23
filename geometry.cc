@@ -11,11 +11,9 @@ Vector::Vector(int a, int b) {
     my_y = b;
 }
 
-//konstruktor kopiujący
 Vector::Vector(const Position &pos) {
     my_x = pos.x();
     my_y = pos.y();
-    cout << "copying constructor vector\n";
 }
 
 bool Vector::operator==(const Vector &other) const {
@@ -41,23 +39,16 @@ int Vector::y() const {
     return my_y;
 }
 
-void Vector::wypisz() {
-    cout << my_x << " " << my_y << endl;
-}
-
 Position::~Position() = default;
 
 Position::Position(int a, int b) {
-    //cout<<"tworze Position "<<a<<" "<<b<<endl;
     my_x = a;
     my_y = b;
 }
 
-//konstruktor kopiujący
 Position::Position(const Vector &vec) {
     my_x = vec.x();
     my_y = vec.y();
-    cout << "copying constuctor position\n";
 }
 
 bool Position::operator==(const Position &other) const {
@@ -67,6 +58,7 @@ bool Position::operator==(const Position &other) const {
 Position &Position::operator+=(const Vector &vec) {
     my_x += vec.x();
     my_y += vec.y();
+
     return *this;
 }
 
@@ -83,12 +75,9 @@ int Position::y() const {
 }
 
 const Position &Position::origin() {
-    static const Position ans(0, 0);
-    return ans;
-}
+    static const Position result(0, 0);
 
-void Position::wypisz() {
-    cout << my_x << " " << my_y << endl;
+    return result;
 }
 
 Position operator+(const Position &pos, const Vector &vec) {
@@ -161,13 +150,6 @@ Rectangle Rectangle::operator+(const Vector &rhs) const {
     return result;
 }
 
-void Rectangle::printRectangle() {
-    cout << "starting printing rectangle..." << endl;
-    recPosition.wypisz();
-    cout << "width: " << recWidth << " " << "height: " << recHeight << endl;
-    cout << "ending printing rectangle" << endl << endl;
-}
-
 Rectangles::Rectangles() = default;
 
 Rectangles::Rectangles(std::initializer_list<Rectangle> rectanglesList) {
@@ -175,19 +157,14 @@ Rectangles::Rectangles(std::initializer_list<Rectangle> rectanglesList) {
     rectangles = vec;
 }
 
-Rectangles::Rectangles(const Rectangles &other) : rectangles(other.rectangles) {
+Rectangles::Rectangles(const Rectangles &other) = default;
+
+Rectangles::Rectangles(Rectangles &&other) noexcept: rectangles(std::move(other.rectangles)) {
 }
 
-Rectangles::Rectangles(Rectangles &&other) : rectangles(std::move(other.rectangles)) {
-}
+Rectangles &Rectangles::operator=(const Rectangles &rhs) = default;
 
-Rectangles &Rectangles::operator=(const Rectangles &rhs) {
-    rectangles = rhs.rectangles;
-
-    return *this;
-}
-
-Rectangles &Rectangles::operator=(Rectangles &&other) {
+Rectangles &Rectangles::operator=(Rectangles &&other) noexcept {
     rectangles = move(other.rectangles);
 
     return *this;
@@ -235,16 +212,20 @@ Rectangles::~Rectangles() = default;
 
 static bool horizontally_possible(const Rectangle &rect1, const Rectangle &rect2) {
     if (rect1.pos() + Vector(0, rect1.height()) == rect2.pos()
-        && rect1.width() == rect2.width())
+        && rect1.width() == rect2.width()) {
+
         return true;
+    }
 
     return false;
 }
 
 static bool vertically_possible(const Rectangle &rect1, const Rectangle &rect2) {
     if (rect1.pos() + Vector(rect1.width(), 0) == rect2.pos()
-        && rect1.height() == rect2.height())
+        && rect1.height() == rect2.height()) {
+
         return true;
+    }
 
     return false;
 }
@@ -261,18 +242,18 @@ Rectangle merge_vertically(const Rectangle &rect1, const Rectangle &rect2) {
     return Rectangle(rect1.width() + rect2.width(), rect1.height(), rect1.pos());
 }
 
-Rectangle merge_all(const Rectangles &rects) {
-    assert(rects.size() > 0);
+Rectangle merge_all(const Rectangles &rectangles) {
+    assert(rectangles.size() > 0);
 
-    Position pos = rects[0].pos();
-    int height = rects[0].height();
-    int width = rects[0].width();
+    Position pos = rectangles[0].pos();
+    int height = rectangles[0].height();
+    int width = rectangles[0].width();
 
-    for (size_t i = 1; i < rects.size(); i++) {
-        if (width == rects[i].width() && pos + Vector(0, height) == rects[i].pos()) {
-            height += rects[i].height();
-        } else if (height == rects[i].height() && pos + Vector(width, 0) == rects[i].pos()) {
-            width += rects[i].width();
+    for (size_t i = 1; i < rectangles.size(); i++) {
+        if (width == rectangles[i].width() && pos + Vector(0, height) == rectangles[i].pos()) {
+            height += rectangles[i].height();
+        } else if (height == rectangles[i].height() && pos + Vector(width, 0) == rectangles[i].pos()) {
+            width += rectangles[i].width();
         } else {
             assert(1 == 0);
         }
@@ -290,70 +271,9 @@ Rectangles operator+(const Vector &vec, const Rectangles &recs) {
 }
 
 Rectangles operator+(Rectangles &&recs, const Vector &vec) {
-    cout << "moving +\n";
     return move(recs) += vec;
 }
 
 Rectangles operator+(const Vector &vec, Rectangles &&recs) {
-    cout << "moving +\n";
     return move(recs) += vec;
 }
-
-//int main() {
-//    Position p1(1, 2);
-//    Vector v1(p1);
-//    Vector v2(2, 3);
-//    Position p2(v2);
-//    p2 = Position(v1);
-//    v1 = Vector(p2);
-//
-////    Position p = Position(Vector(Position(1, 2)));
-////    p.wypisz();
-//
-//
-//    cout << endl << "============ RECTANGLES ============" << endl << endl;
-///*
-//    Rectangle r1(1, 1, p1);
-//
-//    printRectangle(r1);
-//
-//    Rectangle r2 = r1.reflection();
-//
-//    printRectangle(r2);
-//
-//    Rectangle r3 = r1 + v1;
-//
-//    printRectangle(r3);
-//
-//    Rectangle r4 = v1 + r1;
-//
-//    printRectangle(r4);
-//    */
-//
-//    Rectangle r = merge_horizontally(Rectangle(1, 2), Rectangle(1, 7, Position(0, 2)));
-//    Rectangle r2 = merge_vertically(Rectangle(3, 2, Position(-3, 0)), Rectangle(4, 2));
-//    //printRectangle(r2);
-//    Rectangles col = Rectangles({Rectangle(1, 2),
-//                                 Rectangle(3, 2, Position(1, 0)),
-//                                 Rectangle(4, 1, Position(0, 2)),
-//                                 Rectangle(4, 1, Position(0, 3))});
-//    Rectangle wyn = merge_all(col);
-//    //printRectangle(wyn);
-//
-//    for (size_t i = 0; i < col.size(); i++) {
-//        printRectangle(col[i]);
-//    }
-//    Rectangles col2 = col + Vector(1, 1) + Vector(2, 2) + Vector(3, 3);
-//    for (size_t i = 0; i < col2.size(); i++) {
-//        printRectangle(col2[i]);
-//    }
-//
-//    for (size_t i = 0; i < col.size(); i++) {
-//        printRectangle(col[i]);
-//    }
-//
-//    Rectangles recs;
-//    if (recs.size() == 0) {
-//        cout << "The recs is empty\n";
-//    }
-//}

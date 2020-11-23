@@ -15,22 +15,19 @@ public:
 
     Vector(int a, int b);
 
-    //konstruktor kopiujący
     explicit Vector(const Position &pos);
 
     bool operator==(const Vector &other) const;
 
     Vector &operator+=(const Vector &vec);
 
+    Rectangle operator+(const Rectangle &rhs) const;
+
     Vector reflection() const;
 
     int x() const;
 
     int y() const;
-
-    Rectangle operator+(const Rectangle &rhs) const;
-
-    void wypisz();
 };
 
 class Position {
@@ -42,7 +39,6 @@ public:
 
     Position(int a, int b);
 
-    //konstruktor kopiujący
     explicit Position(const Vector &vec);
 
     bool operator==(const Position &other) const;
@@ -56,8 +52,6 @@ public:
     int y() const;
 
     static const Position &origin();
-
-    void wypisz();
 };
 
 class Rectangle {
@@ -74,6 +68,10 @@ public:
 
     bool operator==(const Rectangle &rhs) const;
 
+    Rectangle &operator+=(const Vector &rhs);
+
+    Rectangle operator+(const Vector &rhs) const;
+
     int width() const;
 
     int height() const;
@@ -83,12 +81,6 @@ public:
     Rectangle reflection() const;
 
     size_t area() const;
-
-    Rectangle &operator+=(const Vector &rhs);
-
-    Rectangle operator+(const Vector &rhs) const;
-
-    void printRectangle();
 };
 
 class Rectangles {
@@ -103,11 +95,11 @@ public:
 
     Rectangles(const Rectangles &other);
 
-    Rectangles(Rectangles &&other);
+    Rectangles(Rectangles &&other) noexcept;
 
     Rectangles &operator=(const Rectangles &rhs);
 
-    Rectangles &operator=(Rectangles &&other);
+    Rectangles &operator=(Rectangles &&other) noexcept;
 
     Rectangle &operator[](size_t i);
 
@@ -126,13 +118,6 @@ Position operator+(const Vector &vec, const Position &pos);
 
 Vector operator+(const Vector &vec1, const Vector &vec2);
 
-Rectangle merge_horizontally(const Rectangle &rect1, const Rectangle &rect2);
-
-Rectangle merge_vertically(const Rectangle &rect1, const Rectangle &rect2);
-
-Rectangle merge_all(const Rectangles &rects);
-
-
 Rectangles operator+(const Rectangles &recs, const Vector &vec);
 
 Rectangles operator+(const Vector &vec, const Rectangles &recs);
@@ -140,5 +125,11 @@ Rectangles operator+(const Vector &vec, const Rectangles &recs);
 Rectangles operator+(Rectangles &&recs, const Vector &vec);
 
 Rectangles operator+(const Vector &vec, Rectangles &&recs);
+
+Rectangle merge_horizontally(const Rectangle &rect1, const Rectangle &rect2);
+
+Rectangle merge_vertically(const Rectangle &rect1, const Rectangle &rect2);
+
+Rectangle merge_all(const Rectangles &rectangles);
 
 #endif /* GEOMETRY_H */
