@@ -1,3 +1,5 @@
+#include <vector>
+
 #ifndef GEOMETRY_H
 
 class Position;
@@ -89,6 +91,25 @@ public:
     Rectangle &operator+=(const Vector &rhs);
 
     Rectangle operator+(const Vector &rhs) const;
+};
+
+class Rectangles {
+    std::vector<Rectangle> rectangles;
+
+public:
+    Rectangles(std::initializer_list<Rectangle> rectanglesList);
+
+    Rectangles(Rectangles &&other);
+
+    Rectangles &operator=(Rectangles &&other);
+
+    Rectangle &operator[](size_t i);
+
+    bool operator==(const Rectangles &rhs);
+
+    Rectangles &operator+=(const Vector &rhs);
+
+    size_t size();
 };
 
 Position operator+(const Position &pos, const Vector &vec);

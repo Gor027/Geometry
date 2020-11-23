@@ -177,8 +177,56 @@ void printRectangle(const Rectangle &rec) {
     cout << "ending printing rectangle" << endl << endl;
 }
 
-int main() {
+Rectangles::Rectangles(std::initializer_list<Rectangle> rectanglesList) {
+    std::vector<Rectangle> vec = rectanglesList;
+    rectangles = vec;
+}
 
+Rectangles::Rectangles(Rectangles &&other) : rectangles(std::move(other.rectangles)) {
+}
+
+Rectangles &Rectangles::operator=(Rectangles &&other) {
+    rectangles = other.rectangles;
+
+    return *this;
+}
+
+size_t Rectangles::size() {
+    return rectangles.size();
+}
+
+Rectangle &Rectangles::operator[](size_t i) {
+    assert(i > 0 && i < size());
+
+    return rectangles[i];
+}
+
+bool Rectangles::operator==(const Rectangles &rhs) {
+    for (auto r1 : rectangles) {
+        bool isFound = false;
+        for (auto r2 : rhs.rectangles) {
+            if (r1 == r2) {
+                isFound = true;
+            }
+        }
+
+        if (!isFound) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+Rectangles &Rectangles::operator+=(const Vector &rhs) {
+    for (auto r : rectangles) {
+        r += rhs;
+    }
+
+    return *this;
+}
+
+int main() {
     Position p1(1, 2);
     Vector v1(p1);
     Vector v2(2, 3);
