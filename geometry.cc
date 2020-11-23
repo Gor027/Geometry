@@ -17,13 +17,6 @@ Vector::Vector(const Position &pos) {
     cout << "copying constructor vector\n";
 }
 
-//konstruktor przenoszący
-Vector::Vector(Position &&pos) {
-    my_x = pos.x();
-    my_y = pos.y();
-    cout << "moving constructor vector\n";
-}
-
 bool Vector::operator==(const Vector &other) const {
     return (my_x == other.x() && my_y == other.y());
 }
@@ -62,13 +55,6 @@ Position::Position(const Vector &vec) {
     my_x = vec.x();
     my_y = vec.y();
     cout << "copying constuctor position\n";
-}
-
-//konstruktor przenoszący
-Position::Position(Vector &&vec) {
-    my_x = vec.x();
-    my_y = vec.y();
-    cout << "moving constuctor position\n";
 }
 
 bool Position::operator==(const Position &other) const {
@@ -195,10 +181,20 @@ size_t Rectangles::size() {
     return rectangles.size();
 }
 
+const size_t Rectangles::size() const {
+  return rectangles.size();
+}
+
 Rectangle &Rectangles::operator[](size_t i) {
     assert(i > 0 && i < size());
 
     return rectangles[i];
+}
+
+const Rectangle &Rectangles::operator[](size_t i) const {
+  assert(i > 0 && i < size());
+
+  return rectangles[i];
 }
 
 bool Rectangles::operator==(const Rectangles &rhs) {
@@ -226,6 +222,61 @@ Rectangles &Rectangles::operator+=(const Vector &rhs) {
     return *this;
 }
 
+static bool horizontally_possible(const Rectangle &rect1, const Rectangle &rect2) {
+  if (rect1.pos() + Vector(0, rect1.height()) == rect2.pos()
+      && rect1.width() == rect2.width())
+    return true;
+    
+  return false;
+}
+
+static bool vertically_possible(const Rectangle &rect1, const Rectangle &rect2) {
+  if (rect1.pos() + Vector(rect1.width(), 0) == rect2.pos()
+      && rect1.height() == rect2.height())
+    return true;
+    
+  return false;
+}
+
+Rectangle merge_horizontally(const Rectangle &rect1, const Rectangle &rect2) {
+  assert (horizontally_possible(rect1, rect2));
+  
+  return Rectangle(rect1.width(), rect1.height() + rect2.height(), rect1.pos());
+}
+
+Rectangle merge_vertically(const Rectangle &rect1, const Rectangle &rect2) {
+  assert(vertically_possible(rect1, rect2));
+  
+  return Rectangle(rect1.width() + rect2.width(), rect1.height(), rect1.pos());
+}
+/*
+static void Rectangle::add_height(int height) {
+  recHeight += height;
+}
+static void Rectangle::add_width(int width) {
+  recWidth += width;
+}*/
+
+Rectangle merge_all(const Rectangles &rects) {
+  /*assert(rects.size() > 0);
+  
+  Position pos = rects[0].pos();
+  int height = rects[0].height;
+  int width = rects[0].width;
+  
+  for (size_t i = 1; i < rects.size(); i++) {
+    if (width == rects[i].width() && pos + Vector(0, height) == rects[i].pos()) {
+      height += rects[i].height();
+    }
+    else if (height == rects[i].height() && pos + Vector(width, 0) == rects[i].pos()) {
+      width += rects[i].width();
+    }
+  }
+  
+  return Rectangle(width, height, pos);*/
+  return (Rectangle)rects[0];
+}
+
 int main() {
     Position p1(1, 2);
     Vector v1(p1);
@@ -236,6 +287,7 @@ int main() {
 
 //    Position p = Position(Vector(Position(1, 2)));
 //    p.wypisz();
+
 
     cout << endl << "============ RECTANGLES ============" << endl << endl;
 

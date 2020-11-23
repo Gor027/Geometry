@@ -18,9 +18,6 @@ public:
     //konstruktor kopiujący
     explicit Vector(const Position &pos);
 
-    //konstruktor przenoszący
-    explicit Vector(Position &&pos);
-
     bool operator==(const Vector &other) const;
 
     Vector &operator+=(const Vector &vec);
@@ -47,9 +44,6 @@ public:
 
     //konstruktor kopiujący
     explicit Position(const Vector &vec);
-
-    //konstruktor przenoszący
-    explicit Position(Vector &&vec);
 
     bool operator==(const Position &other) const;
 
@@ -105,11 +99,15 @@ public:
 
     Rectangle &operator[](size_t i);
 
+    const Rectangle &operator[](size_t i) const;
+
     bool operator==(const Rectangles &rhs);
 
     Rectangles &operator+=(const Vector &rhs);
 
     size_t size();
+    
+    const size_t size() const;
 };
 
 Position operator+(const Position &pos, const Vector &vec);
@@ -117,5 +115,11 @@ Position operator+(const Position &pos, const Vector &vec);
 Position operator+(const Vector &vec, const Position &pos);
 
 Vector operator+(const Vector &vec1, const Vector &vec2);
+
+Rectangle merge_horizontally(const Rectangle &rect1, const Rectangle &rect2);
+
+Rectangle merge_vertically(const Rectangle &rect1, const Rectangle &rect2);
+
+Rectangle merge_all(Rectangles rects);
 
 #endif /* GEOMETRY_H */
