@@ -6,72 +6,72 @@ using namespace std;
 
 Vector::~Vector() = default;
 
-Vector::Vector(int a, int b) {
-    my_x = a;
-    my_y = b;
+Vector::Vector(int x, int y) {
+    vecX = x;
+    vecY = y;
 }
 
 Vector::Vector(const Position &pos) {
-    my_x = pos.x();
-    my_y = pos.y();
+    vecX = pos.x();
+    vecY = pos.y();
 }
 
 bool Vector::operator==(const Vector &other) const {
-    return (my_x == other.x() && my_y == other.y());
+    return (vecX == other.vecX && vecY == other.vecY);
 }
 
 Vector &Vector::operator+=(const Vector &vec) {
-    my_x += vec.x();
-    my_y += vec.y();
+    vecX += vec.vecX;
+    vecY += vec.vecY;
 
     return *this;
 }
 
 Vector Vector::reflection() const {
-    return Vector(my_y, my_x);
+    return Vector(vecY, vecX);
 }
 
 int Vector::x() const {
-    return my_x;
+    return vecX;
 }
 
 int Vector::y() const {
-    return my_y;
+    return vecY;
 }
 
 Position::~Position() = default;
 
-Position::Position(int a, int b) {
-    my_x = a;
-    my_y = b;
+Position::Position(int x, int y) {
+    posX = x;
+    posY = y;
 }
 
 Position::Position(const Vector &vec) {
-    my_x = vec.x();
-    my_y = vec.y();
+    posX = vec.x();
+    posY = vec.y();
 }
 
 bool Position::operator==(const Position &other) const {
-    return (my_x == other.x() && my_y == other.y());
+    return (posX == other.posX && posY == other.posY);
 }
 
 Position &Position::operator+=(const Vector &vec) {
-    my_x += vec.x();
-    my_y += vec.y();
+    posX += vec.x();
+    posY += vec.y();
 
     return *this;
 }
 
 Position Position::reflection() const {
-    return Position(my_y, my_x);
+    return Position(posY, posX);
 }
 
 int Position::x() const {
-    return my_x;
+    return posX;
 }
 
 int Position::y() const {
-    return my_y;
+    return posY;
 }
 
 const Position &Position::origin() {
@@ -92,8 +92,8 @@ Vector operator+(const Vector &vec1, const Vector &vec2) {
     return (Vector) (vec1) += vec2;
 }
 
-Rectangle Vector::operator+(const Rectangle &rhs) const {
-    Rectangle result(rhs);
+Rectangle Vector::operator+(const Rectangle &vec) const {
+    Rectangle result(vec);
     result += *this;
 
     return result;
@@ -103,25 +103,26 @@ Rectangle::~Rectangle() = default;
 
 Rectangle::Rectangle(int width, int height) : recPosition(0, 0) {
     assert(width > 0 && height > 0);
-    recWidth = width;
-    recHeight = height;
+    recWidth = (unsigned int) (width);
+    recHeight = (unsigned int) (height);
 }
 
 Rectangle::Rectangle(int width, int height, const Position &pos) : recPosition(pos) {
     assert(width > 0 && height > 0);
-    recWidth = width;
-    recHeight = height;
+    recWidth = (unsigned int) (width);
+    recHeight = (unsigned int) (height);
 }
 
-bool Rectangle::operator==(const Rectangle &rhs) const {
-    return recWidth == rhs.recWidth && recHeight == rhs.recHeight && recPosition == rhs.recPosition;
+bool Rectangle::operator==(const Rectangle &other) const {
+    return (recWidth == other.recWidth && recHeight == other.recHeight 
+             && recPosition == other.recPosition);
 }
 
-int Rectangle::width() const {
+unsigned int Rectangle::width() const {
     return recWidth;
 }
 
-int Rectangle::height() const {
+unsigned int Rectangle::height() const {
     return recHeight;
 }
 
@@ -133,19 +134,19 @@ Rectangle Rectangle::reflection() const {
     return Rectangle(recHeight, recWidth, recPosition.reflection());
 }
 
-size_t Rectangle::area() const {
+unsigned int Rectangle::area() const {
     return recWidth * recHeight;
 }
 
-Rectangle &Rectangle::operator+=(const Vector &rhs) {
-    recPosition += rhs;
+Rectangle &Rectangle::operator+=(const Vector &vec) {
+    recPosition += vec;
 
     return *this;
 }
 
-Rectangle Rectangle::operator+(const Vector &rhs) const {
+Rectangle Rectangle::operator+(const Vector &vec) const {
     Rectangle result = *this;
-    result += rhs;
+    result += vec;
 
     return result;
 }
@@ -162,7 +163,7 @@ Rectangles::Rectangles(const Rectangles &other) = default;
 Rectangles::Rectangles(Rectangles &&other) noexcept: rectangles(std::move(other.rectangles)) {
 }
 
-Rectangles &Rectangles::operator=(const Rectangles &rhs) = default;
+Rectangles &Rectangles::operator=(const Rectangles &other) = default;
 
 Rectangles &Rectangles::operator=(Rectangles &&other) noexcept {
     rectangles = move(other.rectangles);
@@ -186,23 +187,13 @@ const Rectangle &Rectangles::operator[](size_t i) const {
     return rectangles[i];
 }
 
-bool Rectangles::operator==(const Rectangles &rhs) {
-    if (rectangles.size() != rhs.rectangles.size()) {
-        return false;
-    }
-
-    for (size_t i = 0; i < rectangles.size(); ++i) {
-        if (!(rectangles[i] == rhs.rectangles[i])) {
-            return false;
-        }
-    }
-
-    return true;
+bool Rectangles::operator==(const Rectangles &other) {
+    return rectangles == other.rectangles;
 }
 
-Rectangles &Rectangles::operator+=(const Vector &rhs) {
+Rectangles &Rectangles::operator+=(const Vector &vec) {
     for (auto &rectangle : rectangles) {
-        rectangle += rhs;
+        rectangle += vec;
     }
 
     return *this;
@@ -231,7 +222,7 @@ static bool vertically_possible(const Rectangle &rect1, const Rectangle &rect2) 
 }
 
 Rectangle merge_horizontally(const Rectangle &rect1, const Rectangle &rect2) {
-    assert (horizontally_possible(rect1, rect2));
+    assert(horizontally_possible(rect1, rect2));
 
     return Rectangle(rect1.width(), rect1.height() + rect2.height(), rect1.pos());
 }
@@ -242,20 +233,20 @@ Rectangle merge_vertically(const Rectangle &rect1, const Rectangle &rect2) {
     return Rectangle(rect1.width() + rect2.width(), rect1.height(), rect1.pos());
 }
 
-Rectangle merge_all(const Rectangles &rectangles) {
-    assert(rectangles.size() > 0);
+Rectangle merge_all(const Rectangles &recs) {
+    assert(recs.size() > 0);
 
-    Position pos = rectangles[0].pos();
-    int height = rectangles[0].height();
-    int width = rectangles[0].width();
+    Position pos = recs[0].pos();
+    int height = (int) (recs[0].height());
+    int width = (int) (recs[0].width());
 
-    for (size_t i = 1; i < rectangles.size(); i++) {
-        if (width == rectangles[i].width() && pos + Vector(0, height) == rectangles[i].pos()) {
-            height += rectangles[i].height();
-        } else if (height == rectangles[i].height() && pos + Vector(width, 0) == rectangles[i].pos()) {
-            width += rectangles[i].width();
+    for (size_t i = 1; i < recs.size(); i++) {
+        if (width == recs[i].width() && pos + Vector(0, height) == recs[i].pos()) {
+            height += recs[i].height();
+        } else if (height == recs[i].height() && pos + Vector(width, 0) == recs[i].pos()) {
+            width += recs[i].width();
         } else {
-            assert(1 == 0);
+            assert(false);
         }
     }
 

@@ -7,13 +7,13 @@ class Position;
 class Rectangle;
 
 class Vector {
-    int my_x;
-    int my_y;
+    int vecX;
+    int vecY;
 
 public:
     ~Vector();
 
-    Vector(int a, int b);
+    Vector(int x, int y);
 
     explicit Vector(const Position &pos);
 
@@ -21,7 +21,7 @@ public:
 
     Vector &operator+=(const Vector &vec);
 
-    Rectangle operator+(const Rectangle &rhs) const;
+    Rectangle operator+(const Rectangle &rect) const;
 
     Vector reflection() const;
 
@@ -31,13 +31,13 @@ public:
 };
 
 class Position {
-    int my_x;
-    int my_y;
+    int posX;
+    int posY;
 
 public:
     ~Position();
 
-    Position(int a, int b);
+    Position(int x, int y);
 
     explicit Position(const Vector &vec);
 
@@ -56,8 +56,8 @@ public:
 
 class Rectangle {
     Position recPosition;
-    int recWidth;
-    int recHeight;
+    unsigned int recWidth;
+    unsigned int recHeight;
 
 public:
     ~Rectangle();
@@ -66,21 +66,21 @@ public:
 
     Rectangle(int width, int height, const Position &pos);
 
-    bool operator==(const Rectangle &rhs) const;
+    bool operator==(const Rectangle &rect) const;
 
-    Rectangle &operator+=(const Vector &rhs);
+    Rectangle &operator+=(const Vector &vec);
 
-    Rectangle operator+(const Vector &rhs) const;
+    Rectangle operator+(const Vector &vec) const;
 
-    int width() const;
+    unsigned int width() const;
 
-    int height() const;
+    unsigned int height() const;
 
     Position pos() const;
 
     Rectangle reflection() const;
 
-    size_t area() const;
+    unsigned int area() const;
 };
 
 class Rectangles {
@@ -97,7 +97,7 @@ public:
 
     Rectangles(Rectangles &&other) noexcept;
 
-    Rectangles &operator=(const Rectangles &rhs);
+    Rectangles &operator=(const Rectangles &other);
 
     Rectangles &operator=(Rectangles &&other) noexcept;
 
@@ -105,9 +105,9 @@ public:
 
     const Rectangle &operator[](size_t i) const;
 
-    bool operator==(const Rectangles &rhs);
+    bool operator==(const Rectangles &other);
 
-    Rectangles &operator+=(const Vector &rhs);
+    Rectangles &operator+=(const Vector &vec);
 
     size_t size() const;
 };
@@ -130,6 +130,6 @@ Rectangle merge_horizontally(const Rectangle &rect1, const Rectangle &rect2);
 
 Rectangle merge_vertically(const Rectangle &rect1, const Rectangle &rect2);
 
-Rectangle merge_all(const Rectangles &rectangles);
+Rectangle merge_all(const Rectangles &recs);
 
 #endif /* GEOMETRY_H */
