@@ -176,13 +176,13 @@ size_t Rectangles::size() const {
 }
 
 Rectangle &Rectangles::operator[](size_t i) {
-    assert(i >= 0 && i < size());
+    assert(i < size());
 
     return rectangles[i];
 }
 
 const Rectangle &Rectangles::operator[](size_t i) const {
-    assert(i >= 0 && i < size());
+    assert(i < size());
 
     return rectangles[i];
 }
