@@ -103,26 +103,26 @@ Rectangle::~Rectangle() = default;
 
 Rectangle::Rectangle(int width, int height) : recPosition(0, 0) {
     assert(width > 0 && height > 0);
-    recWidth = (unsigned int) (width);
-    recHeight = (unsigned int) (height);
+    recWidth = width;
+    recHeight = height;
 }
 
 Rectangle::Rectangle(int width, int height, const Position &pos) : recPosition(pos) {
     assert(width > 0 && height > 0);
-    recWidth = (unsigned int) (width);
-    recHeight = (unsigned int) (height);
+    recWidth = width;
+    recHeight = height;
 }
 
 bool Rectangle::operator==(const Rectangle &other) const {
-    return (recWidth == other.recWidth && recHeight == other.recHeight 
-             && recPosition == other.recPosition);
+    return (recWidth == other.recWidth && recHeight == other.recHeight
+            && recPosition == other.recPosition);
 }
 
-unsigned int Rectangle::width() const {
+int Rectangle::width() const {
     return recWidth;
 }
 
-unsigned int Rectangle::height() const {
+int Rectangle::height() const {
     return recHeight;
 }
 
@@ -134,7 +134,7 @@ Rectangle Rectangle::reflection() const {
     return Rectangle(recHeight, recWidth, recPosition.reflection());
 }
 
-unsigned int Rectangle::area() const {
+int Rectangle::area() const {
     return recWidth * recHeight;
 }
 

@@ -56,8 +56,8 @@ public:
 
 class Rectangle {
     Position recPosition;
-    unsigned int recWidth;
-    unsigned int recHeight;
+    int recWidth;
+    int recHeight;
 
 public:
     ~Rectangle();
@@ -72,15 +72,15 @@ public:
 
     Rectangle operator+(const Vector &vec) const;
 
-    unsigned int width() const;
+    int width() const;
 
-    unsigned int height() const;
+    int height() const;
 
     Position pos() const;
 
     Rectangle reflection() const;
 
-    unsigned int area() const;
+    int area() const;
 };
 
 class Rectangles {
