@@ -1,7 +1,5 @@
 #include "geometry.h"
 #include <type_traits>
-#include <vector>
-#include <algorithm>
 #include <utility>
 #include <functional>
 #include <limits>
@@ -17,12 +15,6 @@ int main() {
     std::cout << "Starting testing procedure." << std::endl;
 
     // ------------- TEMPLATE TYPE TRAITS CHECKS -------------
-
-    // UWAGA! Move construction/assignment w zasadzie wymagane jest
-    // glownie przy Rectangles, ale najlepiej jak wszystkie klasy beda je miec.
-
-    // Jesli nie zadeklaruje sie copy constructor/copy assignment/move constructor/move assignment/destructor
-    // to kompilator sam je wygeneruje w dobrych wersjach (bo w tym zadaniu wszystkie zasoby sa enkapsulowane STLem),
 
     // Default konstruktory
     assert(!std::is_default_constructible_v<Position>);
@@ -43,15 +35,9 @@ int main() {
     assert(std::is_copy_assignable_v<Rectangles>);
 
     // Move construction
-    assert(std::is_move_constructible_v<Position>);
-    assert(std::is_move_constructible_v<Vector>);
-    assert(std::is_move_constructible_v<Rectangle>);
     assert(std::is_move_constructible_v<Rectangles>);
 
     // Move assignment
-    assert(std::is_move_assignable_v<Position>);
-    assert(std::is_move_assignable_v<Vector>);
-    assert(std::is_move_assignable_v<Rectangle>);
     assert(std::is_move_assignable_v<Rectangles>);
 
     // Destruction
@@ -117,17 +103,15 @@ int main() {
     Vector vec19 = vec18; // Side note: ta linijka to nie operator= tylko wywolanie konstruktora.
     vec19 = vec17;
 
-    // UWAGA! Dalsze dwa sa raczej opcjonalne
-
     Vector vec20{5, 6};
     Vector vec21(6, 9);
 
-    // Istnienie Vector::Vector(Vector &&)
+    // Czy nie dano przypadkiem Vector::Vector(Vector &&) = delete.
     Vector vec22 = std::move(vec20);
 
     Vector vec23{-1, -7};
 
-    // Istnienie Vector::operator=(Vector &&)
+    // Czy nie dano przypadkiem Vector::operator=(Vector &&) = delete.
     vec23 = std::move(vec21);
 
     // Istnienie Vector::~Vector().
@@ -201,17 +185,15 @@ int main() {
     Position pos19 = pos18; // Side note: ta linijka to nie operator= tylko wywolanie konstruktora.
     pos19 = pos17;
 
-    // UWAGA! Dalsze dwa sa raczej opcjonalne
-
     Position pos20{5, 6};
     Position pos21(6, 9);
 
-    // Istnienie Position::Position(Position &&)
+    // Czy nie dano przypadkiem Position::Position(Position &&) = delete.
     Position pos22 = std::move(pos20);
 
     Position pos23{-1, -7};
 
-    // Istnienie Position::operator=(Position &&)
+    // Czy nie dano przypadkiem Position::operator=(Position &&) = delete.
     pos23 = std::move(pos21);
 
     // Istnienie Position::~Position().
@@ -251,8 +233,8 @@ int main() {
     pos29.reflection() = {3, 5};
     vec29.reflection() = {7, 3};
 
-    pos29 == Position{-5, 6};
-    vec29 == Vector{-3, 4};
+    assert((pos29 == Position{-5, 6}));
+    assert((vec29 == Vector{-3, 4}));
 
     Vector vec30{51, 63};
     Vector vec31{-3, -4};
@@ -333,6 +315,20 @@ int main() {
     rec12 += {2, 1};
     assert(rec12 == Rectangle(5, 6));
 
+    Rectangle rec20{5, 6, {1, -3}};
+    Rectangle rec21{6, 9, {-4, 0}};
+
+    // Czy nie dano przypadkiem Rectangle::Rectangle(Rectangle &&) = delete.
+    Rectangle rec22 = std::move(rec20);
+
+    Rectangle rec23{1, 7};
+
+    // Czy nie dano przypadkiem Rectangle::operator=(Rectangle &&) = delete.
+    rec23 = std::move(rec21);
+
+    // Istnienie Rectangle::~Rectangle().
+    rec23.~Rectangle();
+
 // ------------------- RECTANGLES -------------------
 
     // Ma istniec konstruktor domyslny
@@ -355,7 +351,6 @@ int main() {
     assert(recs3.size() == 3);
 
     assert(recs3 == recs4);
-
 
     assert(!(recs1 == recs3));
 
